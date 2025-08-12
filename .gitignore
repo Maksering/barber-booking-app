@@ -2,7 +2,9 @@ user-service/ target/
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
+!**/mvnw
+!**/*.cmd
+!**/*.md
 ### STS ###
 .apt_generated
 .classpath
@@ -11,7 +13,7 @@ user-service/ target/
 .settings
 .springBeans
 .sts4-cache
-
+.cmd
 ### IntelliJ IDEA ###
 .idea
 *.iws
