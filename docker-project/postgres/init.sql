@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS users(
+CREATE TABLE IF NOT EXISTS "user"(
                                     id BIGSERIAL PRIMARY KEY,
                                     email VARCHAR(255),
                                     password VARCHAR(255),
@@ -7,4 +7,4 @@ CREATE TABLE IF NOT EXISTS users(
                                     role VARCHAR(10) CHECK (role IN ('CLIENT', 'MASTER', 'ADMIN'))
 );
 
-COMMENT ON COLUMN users.role IS 'Possible values: CLIENT, MASTER, ADMIN';
+COMMENT ON COLUMN "user".role IS 'Possible values: CLIENT, MASTER, ADMIN';
