@@ -1,4 +1,4 @@
-package com.barberbooking.userservice.model;
+package com.barberbooking.userservice.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

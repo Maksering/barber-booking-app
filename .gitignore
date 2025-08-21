@@ -8,7 +8,7 @@ user-service/ target/
 **/.mvn/
 **/maven-wrapper.jar
 **/HELP.md
-
+.lst
 ### STS ###
 .apt_generated
 .classpath
