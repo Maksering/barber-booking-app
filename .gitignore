@@ -5,6 +5,10 @@ user-service/ target/
 
 *.txt
 *.lst
+*.jar
+*.original
+*.xml
+
 
 **/mvnw
 **/mvnw.cmd
