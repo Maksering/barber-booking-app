@@ -3,12 +3,15 @@ user-service/ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+*.txt
+*.lst
+
 **/mvnw
 **/mvnw.cmd
 **/.mvn/
 **/maven-wrapper.jar
 **/HELP.md
-.lst
+
 ### STS ###
 .apt_generated
 .classpath
@@ -23,6 +26,7 @@ user-service/ target/
 *.iws
 *.iml
 *.ipr
+
 
 ### NetBeans ###
 /nbproject/private/
