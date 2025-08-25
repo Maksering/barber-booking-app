@@ -1,16 +1,17 @@
 package com.barberbooking.userservice.dto;
 
-import com.barberbooking.userservice.model.Role;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class UserDTO {
+@AllArgsConstructor
+public class JwtResponse {
+    private String token;
+    private String type = "Bearer";
     private Long id;
     private String email;
-    private String password;
     private String name;
-    private String phone;
-    private Role role;
+    private String role;
 }

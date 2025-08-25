@@ -1,10 +1,12 @@
-CREATE TABLE IF NOT EXISTS "user"(
+CREATE TABLE IF NOT EXISTS users(
                                     id BIGSERIAL PRIMARY KEY,
-                                    email VARCHAR(255),
-                                    password VARCHAR(255),
+                                    email VARCHAR(255) UNIQUE NOT NULL,
+                                    password VARCHAR(255) NOT NULL,
                                     name VARCHAR(255),
                                     phone VARCHAR(255),
-                                    role VARCHAR(10) CHECK (role IN ('CLIENT', 'MASTER', 'ADMIN'))
+                                    role VARCHAR(255) CHECK (role IN ('CLIENT', 'MASTER', 'ADMIN')),
+                                    created_at TIMESTAMP,
+                                    updated_at TIMESTAMP
 );
 
-COMMENT ON COLUMN "user".role IS 'Possible values: CLIENT, MASTER, ADMIN';
+COMMENT ON COLUMN users.role IS 'Possible values: CLIENT, MASTER, ADMIN';

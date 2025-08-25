@@ -3,6 +3,13 @@ user-service/ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+*.txt
+*.lst
+*.jar
+*.original
+*.xml
+
+
 **/mvnw
 **/mvnw.cmd
 **/.mvn/
@@ -23,6 +30,7 @@ user-service/ target/
 *.iws
 *.iml
 *.ipr
+
 
 ### NetBeans ###
 /nbproject/private/
