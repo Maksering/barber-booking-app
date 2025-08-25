@@ -6,10 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
+import java.util.List;
 
 @Component
 @Slf4j
@@ -23,11 +26,11 @@ public class JwtTokenProvider {
     private SecretKey key;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
 
-    public String generateToken(User user){
+    public String generateToken(User user) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
@@ -38,11 +41,11 @@ public class JwtTokenProvider {
                 .claim("role", user.getRole().name())
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(key,SignatureAlgorithm.HS256)
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public boolean validateToken(String token){
+    public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
                     .setSigningKey(key)
@@ -81,4 +84,13 @@ public class JwtTokenProvider {
         return claims.get("id", Long.class);
     }
 
+    public List<GrantedAuthority> getAuthoritiesFromToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        String role = claims.get("role", String.class);
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role));
+    }
 }
