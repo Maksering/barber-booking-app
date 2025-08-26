@@ -1,10 +1,7 @@
 package com.barberbooking.userservice.service;
 
 
-import com.barberbooking.userservice.dto.JwtResponse;
-import com.barberbooking.userservice.dto.LoginRequest;
-import com.barberbooking.userservice.dto.SignUpRequest;
-import com.barberbooking.userservice.dto.UserDto;
+import com.barberbooking.userservice.dto.*;
 import com.barberbooking.userservice.entity.Role;
 import com.barberbooking.userservice.entity.User;
 import com.barberbooking.userservice.repository.UserRepository;
@@ -12,6 +9,7 @@ import com.barberbooking.userservice.security.JwtTokenProvider;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -98,10 +96,7 @@ public class UserService {
     }
 
     public Long getCurrentUserId(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("User not authenticated");
-        }
+        Authentication authentication = validateAuthentication();
 
         String email = authentication.getName();
         User user = userRepository.findByEmail(email)
@@ -110,6 +105,37 @@ public class UserService {
         return user.getId();
     }
 
+    public UserDto getCurrentUser() {
+        Authentication authentication = validateAuthentication();
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        return convertToDto(user);
+    }
+
+    public UserDto updateCurrentUserName(CurrentUserNameChangeRequest request){
+        Authentication authentication = validateAuthentication();
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setName(request.getNewName());
+        userRepository.save(user);
+        return convertToDto(user);
+    }
+
+    public UserDto updateCurrentUserPhone(CurrentUserPhoneChangeRequest request){
+        Authentication authentication = validateAuthentication();
+
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setPhone(request.getNewPhone());
+        userRepository.save(user);
+        return convertToDto(user);
+    }
 
     private UserDto convertToDto(User user) {
         UserDto dto = new UserDto();
@@ -119,5 +145,14 @@ public class UserService {
         dto.setPhone(user.getPhone());
         dto.setRole(user.getRole().name());
         return dto;
+    }
+
+
+    private Authentication validateAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AuthenticationCredentialsNotFoundException("User not authenticated");
+        }
+        return  authentication;
     }
 }

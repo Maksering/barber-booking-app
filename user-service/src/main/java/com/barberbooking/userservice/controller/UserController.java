@@ -1,16 +1,16 @@
 package com.barberbooking.userservice.controller;
 
+import com.barberbooking.userservice.dto.CurrentUserNameChangeRequest;
+import com.barberbooking.userservice.dto.CurrentUserPhoneChangeRequest;
 import com.barberbooking.userservice.dto.UserDto;
 import com.barberbooking.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -36,6 +36,28 @@ public class UserController {
         UserDto userDto = userService.getUserByEmail(email);
         return ResponseEntity.ok(userDto);
     }
+
+    @GetMapping("/me")
+    @Operation(summary = "Получение информации о сам себе")
+    public ResponseEntity<UserDto> getCurrentUser (){
+        UserDto userDto = userService.getCurrentUser();
+        return ResponseEntity.ok(userDto);
+    }
+
+    @PutMapping("/me/update/name")
+    @Operation(summary = "Обновление текущего имени")
+    public ResponseEntity<UserDto> updateCurrentUserName(@Valid @RequestBody CurrentUserNameChangeRequest request) {
+        UserDto userDto = userService.updateCurrentUserName(request);
+        return ResponseEntity.ok(userDto);
+    }
+
+    @PutMapping("/me/update/phone")
+    @Operation(summary = "Обновление текущего имени")
+    public ResponseEntity<UserDto> updateCurrentUserPhone(@Valid @RequestBody CurrentUserPhoneChangeRequest request) {
+        UserDto userDto = userService.updateCurrentUserPhone(request);
+        return ResponseEntity.ok(userDto);
+    }
+
 
     @GetMapping("/debug/principal")
     @PreAuthorize("hasRole('ADMIN')")
