@@ -1,8 +1,6 @@
 package com.barberbooking.userservice.controller;
 
-import com.barberbooking.userservice.dto.CurrentUserNameChangeRequest;
-import com.barberbooking.userservice.dto.CurrentUserPhoneChangeRequest;
-import com.barberbooking.userservice.dto.UserDto;
+import com.barberbooking.userservice.dto.*;
 import com.barberbooking.userservice.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -52,11 +50,28 @@ public class UserController {
     }
 
     @PutMapping("/me/update/phone")
-    @Operation(summary = "Обновление текущего имени")
+    @Operation(summary = "Обновление текущего телефона")
     public ResponseEntity<UserDto> updateCurrentUserPhone(@Valid @RequestBody CurrentUserPhoneChangeRequest request) {
         UserDto userDto = userService.updateCurrentUserPhone(request);
         return ResponseEntity.ok(userDto);
     }
+
+    @PutMapping("/{id}/update/name")
+    @Operation(summary = "Обновление  имени любого пользователя")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDto> updateAnyUserName(@Valid @RequestBody AnyUserNameChangeRequest request) {
+        UserDto userDto = userService.updateAnyUserName(request);
+        return ResponseEntity.ok(userDto);
+    }
+
+    @PutMapping("/{id}/update/phone")
+    @Operation(summary = "Обновление текущего имени")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDto> updateAnyUserPhone(@Valid @RequestBody AnyUserPhoneChangeRequest request) {
+        UserDto userDto = userService.updateAnyUserPhone(request);
+        return ResponseEntity.ok(userDto);
+    }
+
 
 
     @GetMapping("/debug/principal")

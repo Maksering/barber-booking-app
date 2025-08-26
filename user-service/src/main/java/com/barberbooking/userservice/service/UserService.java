@@ -125,6 +125,15 @@ public class UserService {
         return convertToDto(user);
     }
 
+    public UserDto updateAnyUserName(AnyUserNameChangeRequest request){
+        User user = userRepository.findByEmail(request.getEmailOfUserForChange())
+                .orElseThrow(() -> new RuntimeException(("User not found")));
+
+        user.setName(request.getNewName());
+        userRepository.save(user);
+        return convertToDto(user);
+    }
+
     public UserDto updateCurrentUserPhone(CurrentUserPhoneChangeRequest request){
         Authentication authentication = validateAuthentication();
 
@@ -132,6 +141,15 @@ public class UserService {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
+        user.setPhone(request.getNewPhone());
+        userRepository.save(user);
+        return convertToDto(user);
+    }
+
+    public UserDto updateAnyUserPhone(AnyUserPhoneChangeRequest request){
+        User user = userRepository.findByEmail(request.getEmailOfUserForChange())
+                .orElseThrow(() -> new RuntimeException(("User not found")));
+
         user.setPhone(request.getNewPhone());
         userRepository.save(user);
         return convertToDto(user);
