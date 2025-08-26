@@ -75,7 +75,7 @@ public class JwtTokenProvider {
         return claims.getSubject();
     }
 
-    public Long getUserIdFromToken(String token) {
+    /*public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -92,5 +92,5 @@ public class JwtTokenProvider {
                 .getBody();
         String role = claims.get("role", String.class);
         return List.of(new SimpleGrantedAuthority("ROLE_" + role));
-    }
+    }*/
 }
